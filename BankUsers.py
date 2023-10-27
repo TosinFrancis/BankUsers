@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 import sklearn
 import pickle
 
@@ -21,7 +23,26 @@ if st.button('submit name'):
 
 
 data = pd.read_csv('Financial_inclusion_dataset.csv')
+heat = plt.figure(figsize = (14, 7))
+
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+def transformer(dataframe):
+    lb = LabelEncoder()
+    scaler = StandardScaler()
+    
+    for i in dataframe.columns:  # --------------------------------------------- Iterate through the dataframe columns
+        if i in dataframe.select_dtypes(include = ['object', 'category',]).columns: #-- Select all categorical columns
+            dataframe[i] = lb.fit_transform(dataframe[i]) # -------------------- Label encode selected categorical columns
+    return dataframe
+
+transformer(data)
+
+sns.heatmap(data.corr(), annot = True, cmap = 'BuPu')
+
+st.write(heat)
+
 st.write(data.sample(10))
+
 
 st.sidebar.image('pngwing.com (4).png', caption= f'Welcome {username}')
 
@@ -45,25 +66,6 @@ else:
 input_variable = pd.DataFrame([{"location_type":location_type, "cellphone_access": cellphone_access, "household_size": household_size, "age_of_respondent": age_of_respondent, "gender_of_respondent": gender_of_respondent, "relationship_with_head": relationship_with_head, "marital_status": marital_status, "education_level": education_level, "job_type": job_type }])
 st.write(input_variable)
 
-
-from sklearn.preprocessing import LabelEncoder, StandardScaler
-def transformer(dataframe):
-    lb = LabelEncoder()
-    scaler = StandardScaler()
-    #dep = dataframe.drop('bank_account', axis=1)
-
-     # scale the numerical columns
-    for i in dataframe:# ---------------------------------------------- Iterate through the dataframe columns
-        if i in dataframe.select_dtypes(include = 'number').columns: # --------- Select only the numerical columns
-            dataframe[[i]] = scaler.fit_transform(dataframe[[i]]) # ------------ Scale all the numericals
-
-    # label encode the categorical columns
-    for i in dataframe.columns:  # --------------------------------------------- Iterate through the dataframe columns
-        if i in dataframe.select_dtypes(include = ['object', 'category',]).columns: #-- Select all categorical columns
-            dataframe[i] = lb.fit_transform(dataframe[i]) # -------------------- Label encode selected categorical columns
-    return dataframe
-
-transformer(input_variable)
 
 #from sklearn.preprocessing import LabelEncoder
 #lb = LabelEncoder() 
