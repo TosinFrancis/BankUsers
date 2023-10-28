@@ -13,7 +13,7 @@ st.image('pngwing.com (2).png', width = 400)
 
 st.subheader('Project Brief')
 
-st.markdown("<p style = 'top_margin: 0rem; text-align: justify; color: #FFB4B4'> In the dynamic and ever-evolving landscape of entrepreneurship, startups represent the vanguard of innovation and economic growth. The inception of a new venture is often accompanied by great enthusiasm and ambition, as entrepreneurs strive to transform their groundbreaking ideas into successful businesses. However, one of the central challenges faced by startups is the uncertainty surrounding their financial sustainability and profitability. This uncertainty is exacerbated by a myriad of factors,<br> ranging from market volatility and competition to operational costs and customer acquisition.</p>", unsafe_allow_html = True)
+st.markdown("<p style = 'top_margin: 0rem; text-align: justify; color: #FFB4B4'> Financial inclusion remains one of the main obstacles to economic and human development in Africa. For example, across Kenya, Rwanda, Tanzania, and Uganda only 9.1 million adults (or 14% of adults) have access to or use a commercial bank account. Traditionally, access to bank accounts has been regarded as an indicator of financial inclusion. Despite the proliferation of mobile money in Africa, and the growth of innovative fintech solutions, banks still play a pivotal role in facilitating access to financial services. Access to bank accounts enable households to save and make payments while also helping businesses build up their credit-worthiness and improve their access to loans, insurance, and related services. Therefore, access to bank accounts is an essential contributor to long-term economic growth.  </p>", unsafe_allow_html = True)
 
 st.markdown("<br><br>", unsafe_allow_html = True)
 
@@ -23,7 +23,8 @@ if st.button('submit name'):
 
 
 data = pd.read_csv('Financial_inclusion_dataset.csv')
-heat = plt.figure(figsize = (14, 7))
+
+st.write(data.sample(10))
 
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 def transformer(dataframe):
@@ -36,12 +37,6 @@ def transformer(dataframe):
     return dataframe
 
 transformer(data)
-
-sns.heatmap(data.corr(), annot = True, cmap = 'BuPu')
-
-st.write(heat)
-
-st.write(data.sample(10))
 
 
 st.sidebar.image('pngwing.com (4).png', caption= f'Welcome {username}')
@@ -67,11 +62,12 @@ input_variable = pd.DataFrame([{"location_type":location_type, "cellphone_access
 st.write(input_variable)
 
 
-#from sklearn.preprocessing import LabelEncoder
-#lb = LabelEncoder() 
-#for i in input_variable.columns:
-#    if input_variable[i].dtypes == 'O':
-#        input_variable[i] = lb.fit_transform(input_variable[i])
+
+from sklearn.preprocessing import LabelEncoder
+lb = LabelEncoder() 
+for i in input_variable.columns:
+    if input_variable[i].dtypes == 'O':
+        input_variable[i] = lb.fit_transform(input_variable[i])
 
 pred_result, interpret = st.tabs(["Prediction Tab", "Interpretation Tab"])
 with pred_result:
